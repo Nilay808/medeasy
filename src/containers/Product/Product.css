@@ -1,0 +1,47 @@
+/* @version 1.0 @author [Neelay Goswami](nl339853@dal.ca) */
+
+.prod {
+    
+    gap: 1rem;
+    grid-auto-flow: column;
+  }
+
+  
+.rowone {
+    flex-direction: row;
+  }
+
+.body { 
+    flex-direction:row;
+    justify-content: left;
+    display: grid;
+    float: left;
+    gap: 2rem;
+    grid-auto-flow: column;
+    padding: 10px;
+    margin: 30px;
+    border: 1px solid rgb(15, 15, 15);
+ }
+
+ .responsive {
+    /* width: 50%;
+    height: auto; */
+    width:285px;
+    height:285px;
+  }
+  #Button{
+    background-color: #13878f; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 4px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+#grid{
+  padding: 4px 4px;
+}
