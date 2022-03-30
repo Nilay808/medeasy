@@ -1,4 +1,4 @@
-//this is Css file for rating and review feature which is in the productDisplay.js page 
+/* this is Css file for rating and review feature which is in the productDisplay.js page  */
 .rating{
     display: flex;
     flex-direction: column;
