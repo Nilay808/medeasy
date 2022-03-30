@@ -20,7 +20,7 @@ import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@material-ui/core";
 
 //function for displaying products 
-const Products = (propS) => {
+const Products = (props) => {
   const [productError, setProductError] = useState("");//state for handling error message coming as response
   let navigate = useNavigate();
   const [med, setMed] = useState([]);//state for handling display of medicines
