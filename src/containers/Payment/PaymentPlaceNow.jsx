@@ -89,7 +89,7 @@ export default function PaymentPlaceNow() {
 
         if(paymentMethodType==='Credit/Debit Card'){
             console.log('inside');
-            await axios.post('http://localhost:7000/api/v1/checkout/payment/create-checkout-session',data,{headers: {
+            await axios.post('https://backendgroup18.herokuapp.com/api/v1/checkout/payment/create-checkout-session',data,{headers: {
                 'Content-Type': 'application/json',
                 "token": authToken
                 }}).then((res) => {

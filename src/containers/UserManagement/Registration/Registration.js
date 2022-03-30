@@ -217,13 +217,13 @@ function Registration() {
     }
     console.log("role", userRole)
     if (isValid) {
-      axios.get("http://localhost:7000/api/v1/verifyemail/" + email).then((result) => {
+      axios.get("https://backendgroup18.herokuapp.com/api/v1/verifyemail/" + email).then((result) => {
         console.log("verify email", result)
         if (result.data.success) {
           setEmailError("Email Already Exists. Please register with different email")
         }
         else {
-          axios.post("http://localhost:7000/api/v1/register",
+          axios.post("https://backendgroup18.herokuapp.com/api/v1/register",
             {
               firstName: firstName,
               lastName: lastName,

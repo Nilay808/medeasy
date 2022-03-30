@@ -46,7 +46,7 @@ function Profile() {
                 token = localStorage.getItem("token");
             }
             if (email) {
-                axios.get("http://localhost:7000/api/v1/getuserdetails/" + email, { headers: { "token": token } }).then(
+                axios.get("https://backendgroup18.herokuapp.com/api/v1/getuserdetails/" + email, { headers: { "token": token } }).then(
                     (response) => {
                         console.log(response)
                         if (response.data.success) {
@@ -130,7 +130,7 @@ function Profile() {
             token = localStorage.getItem("token");
         }
         if (isValid) {
-            axios.post("http://localhost:7000/api/v1/changepassword",
+            axios.post("https://backendgroup18.herokuapp.com/api/v1/changepassword",
                 {
                     email: localStorage.getItem('Email'),
                     securityQuestion1: securityQuestion1,

@@ -101,7 +101,7 @@ function OrderPlaced(){
     };
 
     if(paymentStatus === "Success"){
-        axios.post('http://localhost:7000/api/v1/order/createNewOrder',orderData, {headers: {
+        axios.post('https://backendgroup18.herokuapp.com/api/v1/order/createNewOrder',orderData, {headers: {
             'Content-Type': 'application/json',
             "token": authToken
             }}).then((res) => {

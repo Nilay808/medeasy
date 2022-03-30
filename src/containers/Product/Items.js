@@ -13,7 +13,7 @@ function Items() {
   let navigate = useNavigate();
   const [productInfo, setproductInfo] = useState([]);
   // const [productDelete, setproductDelete] = useState([]);
-  const api_url = 'http://localhost:7000/productlist/';
+  const api_url = 'https://backendgroup18.herokuapp.com/productlist/';
   
 // function to redirect to add product page
   const handleClick = (product) => {
@@ -61,7 +61,6 @@ function Items() {
         <br/>
         {productInfo.map((product) => {
           return (
-            // Card Structure to get all the details from the backend and show it in the frontend
             <div class="body">
              
               <ReactBootStrap.Card style={{ width: "18rem",fill:"Highlight" }} key={product._id} >

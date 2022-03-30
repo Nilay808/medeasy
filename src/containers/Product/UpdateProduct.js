@@ -48,7 +48,7 @@ function UpdateProduct() {
   // });
 
   // console.log("params", params.productid);
-  const api_url = 'http://localhost:7000/productlist/'+params.productid;
+  const api_url = 'https://backendgroup18.herokuapp.com/productlist/'+params.productid;
 
 // function to set all the variables with database values
   useEffect(() => {
@@ -70,7 +70,7 @@ function UpdateProduct() {
   function handleName(e) {
     // const newdata = { ...product,Name:e.target.value };
     // console.log(newdata);
-    // // newdata[e.target.id] = e.target.value;
+    // newdata[e.target.id] = e.target.value;
     setName(e.target.value);
   }
   function handleBrand(e)
@@ -185,7 +185,6 @@ function UpdateProduct() {
              <h5> Enter the Details you wish to Update for this Product: </h5>
             </Typography>
             <br/>
-            // form for the update product details
             <form onSubmit={(e) => submit(e)}>
               <Grid container spacing={1}>
                 <Grid xs={12} item>

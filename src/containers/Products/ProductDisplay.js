@@ -1,12 +1,18 @@
-//Author of ProductDisplay are Dhruv Soni and Jainesh Ketan Desai
-//This page shows ProductDisplay show product that is clicked and contains rating and review that customer has posted and customer can also give rating and review to particular.
+/**
+ *
+ * @version 1.0
+ * @author [Dhruv Soni](dh554152@dal.ca)(Banner ID:- B00867642)[Jainesh Desai]
+ */
 import React, { useEffect, useState } from "react";
 import Layout from "../../components/Layout/Layout";
-import { Container, Card, Button } from "react-bootstrap";
+import { Button, Toast, ToastContainer } from "react-bootstrap";
 import "./css/ProductDisplay.css";
-import { useNavigate } from "react-router-dom";
+
+import { GrCart } from "react-icons/gr";
 
 import {
+  Container,
+  Card,
   CardActionArea,
   CardContent,
   Grid,
@@ -14,6 +20,7 @@ import {
   CardMedia,
   CardActions,
 } from "@material-ui/core";
+
 import { useParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Box from "@mui/material/Box";
@@ -27,6 +34,8 @@ import Avatar from "@mui/material/Avatar";
 
 import Divider from "@mui/material/Divider";
 import Root from "@mui/material/Divider";
+import { API } from "../../Constants/api";
+import { Link } from "react-router-dom";
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -35,17 +44,21 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   maxWidth: 400,
   color: theme.palette.text.primary,
 }));
-
+//function for displaying product with particulat ID
 const Products = (props) => {
-  let navigate = useNavigate();
-  const params = useParams();
-  const [value, setValue] = React.useState(0);
-  const [text, setText] = React.useState("");
+  const [show, setShow] = useState(false);
+  const [message, setMessage] = useState(""); //State for handling error message
+  const [productError, setProductError] = useState(""); //state for handling product error message.
+
+  const params = useParams(); //params will be use for getting product ID
+  const [value, setValue] = React.useState();
+  const [text, setText] = React.useState();
   const [Errvalue, setErrvalue] = React.useState(false);
   const [Errrtext, setErrrtext] = React.useState(false);
   const [med, setMed] = useState([]);
   useEffect(() => {
-    fetch(`http://localhost:7000/api/v1/Products/${params.id}`, {
+    //api to fetch the particular product detail
+    fetch(`${API}/Products/${params.id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -53,37 +66,50 @@ const Products = (props) => {
     })
       .then((res) => res.json())
       .then((medicines) => {
-        setMed(medicines);
-      });
-  }, []);
-  
-  const enterIntoCart = (medy) => {
-   
-      fetch("http://localhost:7000/api/v1/AddtoCart", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-
-      body: JSON.stringify({
-        email: "testuser@gmail.com",
-        productID: medy._id,
-        Name: medy.Name,
-        Dose: medy.Dose,
-        Price: medy.Price,
-        Image: medy.ImageURL,
-        Brands: medy.Brands,
-      }),
-    })
-      .then((res) => res.json())
-      .then((item, err) => {
-        if (item) {
-          console.log("item after adding into cart------------", item);
-          navigate("/Cart");
+        if (medicines.success) {
+          setMed(medicines);
         } else {
-          alert(err);
+          setProductError(medicines.message);
         }
       });
+  }, []);
+
+  //This function handles the adding particular medicine to the cart
+  const enterIntoCart = (medy) => {
+    let token = localStorage.getItem("token");
+    console.log("token====", token);
+    if (token === null) {
+      setProductError(...productError, "You need to Login/SignUP First");
+      setMed({ ...med, success: false });
+    } else {
+      let email = localStorage.getItem("Email");
+      fetch(`${API}/AddtoCart`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+
+        body: JSON.stringify({
+          email: email,
+          productID: medy._id,
+          Name: medy.Name,
+          Dose: medy.Dose,
+          Price: medy.Price,
+          Image: medy.ImageURL,
+          Brands: medy.Brands,
+        }),
+      })
+        .then((res) => res.json())
+        .then((item) => {
+          console.log("item=====", item);
+          if (item.success) {
+            setMessage(item.message);
+          } else {
+            setProductError(item.message);
+          }
+        });
+    }
   };
 
   const handlechange = (event) => {
@@ -106,7 +132,7 @@ const Products = (props) => {
       console.log("LLLLLL");
 
       axios
-        .post("http://localhost:7000/postratingandreview", {
+        .post("https://backendgroup18.herokuapp.com/postratingandreview", {
           rating: value,
           review: text,
           productID: med._id,
@@ -121,11 +147,11 @@ const Products = (props) => {
 
     }
   };
- 
+
   const [response, setResponse] = useState([]);
 
   useEffect(() => {
-    let api=`http://localhost:7000/reviewandrating/${params.id}`;
+    let api = `https://backendgroup18.herokuapp.com/reviewandrating/${params.id}`;
 
     axios
       .get(api)
@@ -138,37 +164,51 @@ const Products = (props) => {
         console.error(err);
       });
   }, []);
-
-  return med ? (
+  return med.success ? (
     <div>
       <Layout>
-        <Container>
+        <Container style={{ marginBlockStart: "20px", display: "flex" }}>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
+            <Grid item xs={8}>
               <Card sx={{ maxWidth: 345 }}>
                 <CardActionArea>
                   <CardMedia
                     component="img"
-                    height="200"
-                    image={med.ImageURL}
+                    height="350"
+                    image={med.medicineRecord.ImageURL}
                     alt="green iguana"
                   />
-                  <CardContent>
-                    <Typography>Name: {med.Name}</Typography>
-                    <Typography>Brand: {med.Brands}</Typography>
-                    <Typography>Dose: {med.Dose}</Typography>
-                    <Typography>Price: ${med.Price}</Typography>
-                    <Typography>ProductType: {med.ProductType}</Typography>
-                    <Typography>
-                      Product Description: {med.ProductDescription}
+                  <CardContent
+                    style={{ backgroundColor: "#11999E", color: "white" }}
+                  >
+                    <Typography style={{ fontWeight: "bold" }}>
+                      Name: {med.medicineRecord.Name}
+                    </Typography>
+                    <Typography style={{ fontWeight: "bold" }}>
+                      Brand: {med.medicineRecord.Brands}
+                    </Typography>
+                    <Typography style={{ fontWeight: "bold" }}>
+                      Dose: {med.medicineRecord.Dose}
+                    </Typography>
+                    <Typography style={{ fontWeight: "bold" }}>
+                      Price: ${med.medicineRecord.Price}
+                    </Typography>
+                    <Typography style={{ fontWeight: "bold" }}>
+                      ProductType: {med.medicineRecord.ProductType}
+                    </Typography>
+                    <Typography style={{ fontWeight: "bold" }}>
+                      Product Description:{" "}
+                      {med.medicineRecord.ProductDescription}
                     </Typography>
                   </CardContent>
                   <CardActions>
                     <Button
+                      style={{ backgroundColor: "#1A374D", color: "white" }}
                       size="small"
-                      style={{ color: "" }}
+                      variant="contained"
                       onClick={() => {
-                        enterIntoCart(med);
+                        enterIntoCart(med.medicineRecord);
+                        setShow(true);
                       }}
                     >
                       AddtoCart
@@ -208,12 +248,15 @@ const Products = (props) => {
                       {Errrtext ? <span> Not Valid review</span> : ""}
                      
                       <div>
-                        <button class="button" onClick={handlesubmit}>
+                        <Button
+                          style={{ backgroundColor: "#1A374D", color: "white" }}
+                          size="small"
+                          variant="contained"
+                          onClick={handlesubmit}
+                        >
                           Submit
-                        </button>
+                        </Button>
                       </div>
-
-                      {/* <button type="button" onClick={handlesubmit}> Submit</button> */}
                     </form>
                   </div>
                   <div className="ratingandreviewboxforcomment">
@@ -269,13 +312,58 @@ const Products = (props) => {
                 </CardActionArea>
               </Card>
             </Grid>
+            {message && (
+              <ToastContainer position="middle-end">
+                <Toast
+                  onClose={() => {
+                    setShow(false);
+                  }}
+                  show={show}
+                  delay={10000}
+                  bg="warning"
+                  animation
+                  style={{ color: "black" }}
+                  autohide
+                >
+                  <Toast.Header>
+                    <GrCart style={{ color: "red" }} />
+                  </Toast.Header>
+                  <Toast.Body>
+                    <Typography gutterBottom variant="h5" component="div">
+                      {message}
+                    </Typography>
+                  </Toast.Body>
+                </Toast>
+              </ToastContainer>
+            )}
           </Grid>
         </Container>
       </Layout>
     </div>
   ) : (
     <Layout>
-      <h1>Empty Medicines</h1>
+      <ToastContainer position="middle-center">
+        <Toast
+          onClose={() => {
+            setShow(false);
+          }}
+          show={show}
+          delay={10000}
+          bg="danger"
+          animation
+          style={{ color: "black" }}
+          autohide
+        >
+          <Toast.Header>
+            {<Link to="/Register">Go to SignUp</Link>}
+          </Toast.Header>
+          <Toast.Body>
+            <Typography gutterBottom variant="h5" component="div">
+              {productError}
+            </Typography>
+          </Toast.Body>
+        </Toast>
+      </ToastContainer>
     </Layout>
   );
 };

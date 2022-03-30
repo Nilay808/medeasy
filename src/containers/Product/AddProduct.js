@@ -23,7 +23,7 @@ import {
 // This function is used for adding the product to the website inventory
 
 function AddProduct() {
-  const api_url = "http://localhost:7000/products";
+  const api_url = "https://backendgroup18.herokuapp.com/products";
   // const navigate = useNavigate;
   const [image,setImage] = useState(null);
   const [webimage,setWebImage] = useState("");
@@ -32,7 +32,7 @@ function AddProduct() {
   // const [isurlgenerated, setGenerated] = useState(false);
 
 
-  //State to store initial valus of all the product details
+  // State to store initial valus of all the product details
   const [productInfo, setproductInfo] = useState({
     Name: "",
     Brands: "",
@@ -44,7 +44,7 @@ function AddProduct() {
     ImageURL:"",
   });
 
-//function to set Image 
+// function to set Image 
   const handleImage= e =>
   {
     if(e.target.files[0]){
@@ -54,7 +54,7 @@ function AddProduct() {
   };
   console.log("Imagename",image)
 
-//function to upload image to firebase  
+// function to upload image to firebase  
   const handleUpload = () =>
   {
     const storageRef = ref(store, 'images/' + image.name);
@@ -100,7 +100,7 @@ function AddProduct() {
         alert("Product Added")
       });
   }
-  //function to handle each field of the form 
+  // function to handle each field of the form 
   function handle(e) {
     const newdata = { ...productInfo };
     newdata[e.target.id] = e.target.value;
@@ -118,7 +118,7 @@ function AddProduct() {
             padding: "20px 20px",
             margin: "3em auto auto  auto",
           }}>
-          // Form to add product to the database
+         
           <CardContent>
             <Typography gutterBottom variant="h5">
               Add Product Page

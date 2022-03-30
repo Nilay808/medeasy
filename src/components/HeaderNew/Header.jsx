@@ -12,6 +12,7 @@
 import React from 'react';
 // import {Nav, NavLink,Bars, Link} from 'react-router-dom';
 import { FcSearch } from 'react-icons/fc';
+import medicinelogo from "../../images/medicine.svg"
 import {FaCartPlus} from 'react-icons/fa';
 import {RiLoginBoxFill} from 'react-icons/ri';
 import {BsPersonPlusFill} from 'react-icons/bs';
@@ -22,6 +23,7 @@ import {GrLogout} from 'react-icons/gr';
 import {Navbar, NavDropdown, Container} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import '../Header/Header.css';
+import "./Header.css";
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import Menu from '@mui/material/Menu';
@@ -59,7 +61,7 @@ export default function Header(props) {
 
     //Search box functionality 
      // method to search box
-     const product_data_url = "http://localhost:7000/products/";
+     const product_data_url = "https://backendgroup18.herokuapp.com/products/";
      const [name, setName] = useState('')
      const { setSearchResults, setIsFetching } = useContext(searchResultsContext);
      const lastSearchTerm = props.searchTerm;
@@ -111,7 +113,9 @@ export default function Header(props) {
     <>  
         <Navbar collapseOnSelect expand="lg" variant="dark" className="CustomNavbar">
             <Container>
+               
             <Link to="/" className="navbar-brand Brand">
+            <img src={medicinelogo} className="App-logo"alt=""></img>
                 {/* <div className="LogoContainer">
                     <img src={require('../../images/MedEasy_Logo2.png')} alt="MedEasy" />
                     

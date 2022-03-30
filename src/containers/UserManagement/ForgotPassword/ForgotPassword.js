@@ -130,7 +130,7 @@ function ForgotPassword() {
     console.log(event);
     event.preventDefault();
     if (isValid) {
-      axios.post("http://localhost:7000/api/v1/forgotpassword",
+      axios.post("https://backendgroup18.herokuapp.com/api/v1/forgotpassword",
         {
           email: email,
           securityQuestion1: securityQuestion1,
